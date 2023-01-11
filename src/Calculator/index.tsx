@@ -77,6 +77,58 @@ export const Calculator: React.FC = () => {
         },
       ],
     },
+    {
+      ln: [
+        {
+          id: 0,
+          title: <NumberFour />,
+          value: 4,
+        },
+        {
+          id: 1,
+          title: <NumberFive />,
+          value: 5,
+        },
+        {
+          id: 2,
+          title: <NumberSix />,
+          value: 6,
+        },
+        {
+          id: 3,
+          title: <Minus />,
+          value: 'subtraction',
+        },
+      ],
+    },
+
+    {
+      ln: [
+        {
+          id: 1,
+          title: <NumberOne />,
+          value: 1,
+        },
+
+        {
+          id: 2,
+          title: <NumberTwo />,
+          value: 2,
+        },
+
+        {
+          id: 3,
+          title: <NumberThree />,
+          value: 3,
+        },
+
+        {
+          id: 0,
+          title: <Plus />,
+          value: 'addition',
+        },
+      ],
+    },
   ];
 
   return (
@@ -84,60 +136,6 @@ export const Calculator: React.FC = () => {
       <S.Container>
         <S.Result>0</S.Result>
         <div>
-          <S.Line>
-            <S.Button>AC</S.Button>
-            <S.Button>
-              <Radical />
-            </S.Button>
-            <S.Button>
-              <Percent />
-            </S.Button>
-            <S.Button>
-              <Divide />
-            </S.Button>
-          </S.Line>
-          <S.Line>
-            <S.Button>
-              <NumberSeven />
-            </S.Button>
-            <S.Button>
-              <NumberEight />
-            </S.Button>
-            <S.Button>
-              <NumberNine />
-            </S.Button>
-            <S.Button>
-              <X />
-            </S.Button>
-          </S.Line>
-          <S.Line>
-            <S.Button>
-              <NumberFour />
-            </S.Button>
-            <S.Button>
-              <NumberFive />
-            </S.Button>
-            <S.Button>
-              <NumberSix />
-            </S.Button>
-            <S.Button>
-              <Minus />
-            </S.Button>
-          </S.Line>
-          <S.Line>
-            <S.Button>
-              <NumberOne />
-            </S.Button>
-            <S.Button>
-              <NumberTwo />
-            </S.Button>
-            <S.Button>
-              <NumberThree />
-            </S.Button>
-            <S.Button>
-              <Plus />
-            </S.Button>
-          </S.Line>
           <S.Line isGrid>
             <S.Button variant="lg">
               <NumberZero />
