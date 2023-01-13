@@ -136,6 +136,14 @@ export const Calculator: React.FC = () => {
       <S.Container>
         <S.Result>0</S.Result>
         <div>
+          {keyboardKey.map((bt) => (
+            <S.Line>
+              <S.Button>
+                <button>{}</button>
+              </S.Button>
+            </S.Line>
+          ))}
+
           <S.Line isGrid>
             <S.Button variant="lg">
               <NumberZero />
