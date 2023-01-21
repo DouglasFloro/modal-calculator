@@ -15,19 +15,21 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background: #000;
-
-  & > div {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 10px;
-  }
+  border-radius: 10px;
+  padding: 5px 5px;
 `;
 
 export const Result = styled.section`
-  height: 35px;
-  background: #fff;
-  color: #000;
+  height: 50px;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+  background: #000;
+  color: #fff;
+  font-size: 1.7em;
+  border-radius: 10px;
 `;
 export const Line = styled.div<{ isGrid?: boolean }>`
   display: flex;
@@ -38,15 +40,27 @@ export const Line = styled.div<{ isGrid?: boolean }>`
     css`
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
+      justify-items: end;
     `}
 `;
 
-export const Button = styled.button<{ variant?: 'lg' }>`
+export const Button = styled.button<{
+  variant?: 'lg';
+  isColor: 'dark' | 'light' | 'orange';
+  colorFont: 'black' | 'white';
+}>`
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  font-size: 1.1em;
 
-  background: #333333;
+  color: ${({ colorFont }) => (colorFont === 'black' ? '#000' : '#fff')};
+  background: ${({ isColor }) =>
+    isColor === 'dark'
+      ? '#333333'
+      : isColor === 'light'
+      ? '#A5A5A5'
+      : '#FB9F0B'};
 
   ${({ variant }) =>
     variant === 'lg' &&
