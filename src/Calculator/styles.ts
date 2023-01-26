@@ -20,11 +20,11 @@ export const Container = styled.div`
 `;
 
 export const Result = styled.section`
-  height: 50px;
+  height: 80px;
 
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+  align-items: flex-end;
   padding: 10px;
   background: #000;
   color: #fff;
@@ -53,6 +53,7 @@ export const Button = styled.button<{
   height: 50px;
   border-radius: 50%;
   font-size: 1.1em;
+  cursor: pointer;
 
   color: ${({ colorFont }) => (colorFont === 'black' ? '#000' : '#fff')};
   background: ${({ isColor }) =>

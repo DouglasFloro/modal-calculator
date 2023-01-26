@@ -17,9 +17,39 @@ import {
   Radical,
   X,
 } from 'phosphor-react';
+import { useState } from 'react';
 import * as S from './styles';
 
 export const Calculator: React.FC = () => {
+  const [number, setNumber] = useState<string | number>(0);
+  const [oldNumber, setOldNumber] = useState<string | number>(0);
+  const [operation, setOperation] = useState<string | undefined>(undefined);
+
+  const cleanHandler = (value: string) => {
+    setNumber((old) =>
+      old.toString().length === 1 ? 0 : old.toString().slice(0, -1),
+    );
+  };
+  /**
+   * operations
+   * soma +
+   * subtração -
+   * multiplicação *
+   * divisão /
+   * radical Math.sqrt(9)
+   */
+  const operationHandler = (value: string) => {
+    setOperation(value);
+  };
+
+  const numberHandler = (value: number) => {
+    setNumber((old) => (old === 0 ? value : old + String(value)));
+  };
+
+  const equalHandler = (value: string) => {
+    console.log('clicou ', value);
+  };
+
   const keyboardKey: {
     line: {
       isGrid: boolean;
@@ -30,6 +60,7 @@ export const Calculator: React.FC = () => {
         variant?: 'lg';
         isColor: 'dark' | 'light' | 'orange';
         colorFont: 'black' | 'white';
+        onClick?: React.MouseEventHandler;
       }[];
     };
   }[] = [
@@ -44,6 +75,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'light',
             colorFont: 'black',
+            onClick: () => cleanHandler('clean'),
           },
 
           {
@@ -53,6 +85,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'light',
             colorFont: 'black',
+            onClick: () => operationHandler('radical'),
           },
 
           {
@@ -62,6 +95,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'light',
             colorFont: 'black',
+            onClick: () => operationHandler('percent'),
           },
 
           {
@@ -71,6 +105,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'orange',
             colorFont: 'white',
+            onClick: () => operationHandler('divide'),
           },
         ],
       },
@@ -87,6 +122,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
+            onClick: () => numberHandler(7),
           },
 
           {
@@ -96,6 +132,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
+            onClick: () => numberHandler(8),
           },
 
           {
@@ -105,6 +142,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
+            onClick: () => numberHandler(9),
           },
 
           {
@@ -114,6 +152,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'orange',
             colorFont: 'white',
+            onClick: () => operationHandler('multiplication'),
           },
         ],
       },
@@ -129,6 +168,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
+            onClick: () => numberHandler(4),
           },
           {
             id: 1,
@@ -137,6 +177,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
+            onClick: () => numberHandler(5),
           },
           {
             id: 2,
@@ -145,6 +186,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
+            onClick: () => numberHandler(6),
           },
           {
             id: 3,
@@ -153,6 +195,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'orange',
             colorFont: 'white',
+            onClick: () => operationHandler('subtraction'),
           },
         ],
       },
@@ -169,6 +212,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
+            onClick: () => numberHandler(1),
           },
 
           {
@@ -178,6 +222,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
+            onClick: () => numberHandler(2),
           },
 
           {
@@ -187,6 +232,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
+            onClick: () => numberHandler(3),
           },
 
           {
@@ -196,6 +242,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'orange',
             colorFont: 'white',
+            onClick: () => operationHandler('addition'),
           },
         ],
       },
@@ -212,6 +259,7 @@ export const Calculator: React.FC = () => {
             variant: 'lg',
             isColor: 'dark',
             colorFont: 'white',
+            onClick: () => numberHandler(0),
           },
 
           {
@@ -221,6 +269,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
+            onClick: () => operationHandler(','),
           },
 
           {
@@ -230,6 +279,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'orange',
             colorFont: 'white',
+            onClick: () => equalHandler('equal'),
           },
         ],
       },
@@ -239,11 +289,12 @@ export const Calculator: React.FC = () => {
   return (
     <S.Wrapper>
       <S.Container>
-        <S.Result>0</S.Result>
+        <S.Result>{number}</S.Result>
         {keyboardKey.map((ln, index) => (
           <S.Line isGrid={ln.line.isGrid} key={index}>
             {ln.line.buttons.map((button) => (
               <S.Button
+                onClick={button.onClick}
                 variant={button.variant}
                 isColor={button.isColor}
                 colorFont={button.colorFont}
