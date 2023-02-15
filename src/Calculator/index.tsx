@@ -17,19 +17,44 @@ import {
   Radical,
   X,
 } from 'phosphor-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import * as S from './styles';
 
 export const Calculator: React.FC = () => {
-  const [number, setNumber] = useState<string | number>(0);
-  const [oldNumber, setOldNumber] = useState<string | number>(0);
+  const [currentValue, setCurrentValue] = useState<string | number>(0);
+  const [oldValue, setOldValue] = useState<string | number>(0);
   const [operation, setOperation] = useState<string | undefined>(undefined);
+  const [historic, setHistoric] = useState<string | undefined>(undefined);
 
-  const cleanHandler = (value: string) => {
-    setNumber((old) =>
+  const oldValueRef = useRef(false);
+
+  const cleanHandler = () => {
+    if (operation) {
+      setCurrentValue(0);
+      setOperation(undefined);
+      return;
+    }
+    setCurrentValue((old) =>
       old.toString().length === 1 ? 0 : old.toString().slice(0, -1),
     );
+
+    setHistoric((old) =>
+      old?.toString().length === 1 ? undefined : old?.toString().slice(0, -1),
+    );
   };
+
+  const radicalOperation = () => {
+    setCurrentValue((old) => Math.sqrt(Number(old)));
+  };
+
+  const percentOperation = () => {
+    setCurrentValue((old) => Number(old) / 100);
+  };
+
+  const multiplicationOperation = () => {
+    setOldValue(currentValue);
+  };
+
   /**
    * operations
    * soma +
@@ -40,14 +65,28 @@ export const Calculator: React.FC = () => {
    */
   const operationHandler = (value: string) => {
     setOperation(value);
+    oldValueRef.current = false;
+    if (value === 'radical') radicalOperation();
+    if (value === 'percent') percentOperation();
+    if (value === 'multiplication') multiplicationOperation();
   };
 
-  const numberHandler = (value: number) => {
-    setNumber((old) => (old === 0 ? value : old + String(value)));
+  const currentValueHandler = (value: number) => {
+    if (oldValue && !oldValueRef.current) {
+      setCurrentValue(0);
+      oldValueRef.current = true;
+    }
+
+    setHistoric((old) =>
+      old === undefined ? String(value) : old + String(value),
+    );
+
+    setCurrentValue((old) => (old === 0 ? value : old + String(value)));
   };
 
-  const equalHandler = (value: string) => {
-    console.log('clicou ', value);
+  const equalHandler = () => {
+    if (operation === 'multiplication')
+      setCurrentValue((old) => Number(old) * Number(oldValue));
   };
 
   const keyboardKey: {
@@ -59,6 +98,7 @@ export const Calculator: React.FC = () => {
         value: string | number;
         variant?: 'lg';
         isColor: 'dark' | 'light' | 'orange';
+        isActive?: boolean;
         colorFont: 'black' | 'white';
         onClick?: React.MouseEventHandler;
       }[];
@@ -75,7 +115,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'light',
             colorFont: 'black',
-            onClick: () => cleanHandler('clean'),
+            onClick: () => cleanHandler(),
           },
 
           {
@@ -122,7 +162,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
-            onClick: () => numberHandler(7),
+            onClick: () => currentValueHandler(7),
           },
 
           {
@@ -132,7 +172,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
-            onClick: () => numberHandler(8),
+            onClick: () => currentValueHandler(8),
           },
 
           {
@@ -142,7 +182,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
-            onClick: () => numberHandler(9),
+            onClick: () => currentValueHandler(9),
           },
 
           {
@@ -151,6 +191,7 @@ export const Calculator: React.FC = () => {
             value: 'multiplication',
             variant: undefined,
             isColor: 'orange',
+            isActive: operation === 'multiplication',
             colorFont: 'white',
             onClick: () => operationHandler('multiplication'),
           },
@@ -168,7 +209,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
-            onClick: () => numberHandler(4),
+            onClick: () => currentValueHandler(4),
           },
           {
             id: 1,
@@ -177,7 +218,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
-            onClick: () => numberHandler(5),
+            onClick: () => currentValueHandler(5),
           },
           {
             id: 2,
@@ -186,7 +227,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
-            onClick: () => numberHandler(6),
+            onClick: () => currentValueHandler(6),
           },
           {
             id: 3,
@@ -212,7 +253,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
-            onClick: () => numberHandler(1),
+            onClick: () => currentValueHandler(1),
           },
 
           {
@@ -222,7 +263,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
-            onClick: () => numberHandler(2),
+            onClick: () => currentValueHandler(2),
           },
 
           {
@@ -232,7 +273,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'dark',
             colorFont: 'white',
-            onClick: () => numberHandler(3),
+            onClick: () => currentValueHandler(3),
           },
 
           {
@@ -259,7 +300,7 @@ export const Calculator: React.FC = () => {
             variant: 'lg',
             isColor: 'dark',
             colorFont: 'white',
-            onClick: () => numberHandler(0),
+            onClick: () => currentValueHandler(0),
           },
 
           {
@@ -279,7 +320,7 @@ export const Calculator: React.FC = () => {
             variant: undefined,
             isColor: 'orange',
             colorFont: 'white',
-            onClick: () => equalHandler('equal'),
+            onClick: () => equalHandler(),
           },
         ],
       },
@@ -289,7 +330,10 @@ export const Calculator: React.FC = () => {
   return (
     <S.Wrapper>
       <S.Container>
-        <S.Result>{number}</S.Result>
+        <S.Result>
+          <span>{historic}</span>
+          <span>{currentValue}</span>
+        </S.Result>
         {keyboardKey.map((ln, index) => (
           <S.Line isGrid={ln.line.isGrid} key={index}>
             {ln.line.buttons.map((button) => (
@@ -297,6 +341,7 @@ export const Calculator: React.FC = () => {
                 onClick={button.onClick}
                 variant={button.variant}
                 isColor={button.isColor}
+                isActive={button.isActive}
                 colorFont={button.colorFont}
                 key={button.id}
                 value={button.value}>

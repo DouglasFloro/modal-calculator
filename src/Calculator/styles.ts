@@ -23,13 +23,21 @@ export const Result = styled.section`
   height: 80px;
 
   display: flex;
+  flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
+  gap: 8px;
   padding: 10px;
   background: #000;
   color: #fff;
-  font-size: 1.7em;
+  font-size: 1.7rem;
   border-radius: 10px;
+  & > span {
+    &:first-child {
+      font-size: 1rem;
+      color: #ccc;
+    }
+  }
 `;
 export const Line = styled.div<{ isGrid?: boolean }>`
   display: flex;
@@ -47,6 +55,7 @@ export const Line = styled.div<{ isGrid?: boolean }>`
 export const Button = styled.button<{
   variant?: 'lg';
   isColor: 'dark' | 'light' | 'orange';
+  isActive?: boolean;
   colorFont: 'black' | 'white';
 }>`
   width: 50px;
@@ -73,5 +82,12 @@ export const Button = styled.button<{
       justify-content: flex-start;
       align-items: center;
       padding: 0 16px;
+    `}
+
+  ${({ isActive }) =>
+    isActive &&
+    css`
+      color: #fb9f0b;
+      background: #fff;
     `}
 `;
